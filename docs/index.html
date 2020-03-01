@@ -19,8 +19,74 @@
       <div class="slides">
   
 
-    <section><h1 id="hello-world">Hello world!</h1>
-<p>This is my first slide.</p>
+    <section><h1 id="sysl">Sysl</h1>
+<h2 id="system-modeling-language-toolkit">System Modeling Language Toolkit</h2>
+</section><section>
+<h1 id="swagger-vs-proto-vs-sysl">Swagger vs proto vs Sysl</h1>
+<ul>
+<li>All specify APIs</li>
+<li>Sysl specifies how those APIs interact with other systems</li>
+</ul>
+</section><section>
+<h1 id="swagger-example">Swagger example</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#e6db74">&#34;Boiler plate server info here&#34;</span>
+<span style="color:#66d9ef">paths</span>:
+  <span style="color:#66d9ef">/users</span>:
+    <span style="color:#66d9ef">get</span>:
+      <span style="color:#66d9ef">summary</span>: Returns a list of users.
+      <span style="color:#66d9ef">description</span>: Optional extended description in CommonMark or HTML.
+      <span style="color:#66d9ef">responses</span>:
+        <span style="color:#66d9ef">&#39;200&#39;</span>:    <span style="color:#75715e"># status code</span>
+          <span style="color:#66d9ef">description</span>: A JSON array of user names
+          <span style="color:#66d9ef">content</span>:
+            <span style="color:#66d9ef">application/json</span>:
+              <span style="color:#66d9ef">schema</span>: 
+                <span style="color:#66d9ef">type</span>: array
+                <span style="color:#66d9ef">items</span>: 
+                  <span style="color:#66d9ef">type</span>: string
+</code></pre></div></section><section>
+<h1 id="proto-example">Proto example</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Request</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">string</span> query <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Response</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">string</span> query <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">service</span> Foo{<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">rpc</span> thisEndpoint(Request) <span style="color:#66d9ef">returns</span>(Response);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">service</span> Bar{<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">rpc</span> AnotherEndpoint(Request) <span style="color:#66d9ef">returns</span>(Response);<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div></section><section>
+<h1 id="sysl-example">Sysl example</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#a6e22e">Bar</span>:
+    <span style="color:#a6e22e">AnotherEndpoint</span>(<span style="color:#a6e22e">input</span> &lt;: <span style="color:#a6e22e">Foo</span>.<span style="color:#a6e22e">Request</span>):
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">Response</span>
+<span style="color:#a6e22e">Foo</span>:
+    <span style="color:#a6e22e">thisEndpoint</span>(<span style="color:#a6e22e">input</span> &lt;: <span style="color:#a6e22e">Request</span>):
+        <span style="color:#a6e22e">Bar</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">AnotherEndpoint</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ok</span> &lt;: <span style="color:#a6e22e">Response</span>
+    !<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Request</span>:
+        <span style="color:#a6e22e">query</span> &lt;: <span style="color:#66d9ef">string</span>
+    !<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Response</span>:
+        <span style="color:#a6e22e">query</span> &lt;: <span style="color:#66d9ef">string</span>
+
+</code></pre></div></section><section>
+<h1 id="modelling-interactions">Modelling interactions</h1>
+<p><a href="http://anz-bank.github.io//sysl-playground/?input=QmFyOgogICAgQW5vdGhlckVuZHBvaW50KGlucHV0IDw6IEZvby5SZXF1ZXN0KToKICAgICAgICByZXR1cm4gUmVzcG9uc2UKRm9vOgogICAgdGhpc0VuZHBvaW50KGlucHV0IDw6IFJlcXVlc3QpOgogICAgICAgIEJhciA8LSBBbm90aGVyRW5kcG9pbnQKICAgICAgICByZXR1cm4gUmVzcG9uc2UKICAgICF0eXBlIFJlcXVlc3Q6CiAgICAgICAgcXVlcnkgPDogc3RyaW5nCiAgICAhdHlwZSBSZXNwb25zZToKICAgICAgICBxdWVyeSA8OiBzdHJpbmc=&amp;cmd=c3lzbCBzZCAtbyAicHJvamVjdC5zdmciIC1zICJGb28gPC0gdGhpc0VuZHBvaW50IiB0bXAuc3lzbA==">Sequence Diagram Generation</a></p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p><a href="static/images/simple.svg">Sequence Diagram Generation</a></p>
+</section><section>
+<h1 id="code-generation">Code Generation</h1>
+<ul>
+<li>github.com/anz-bank/sysltemplate</li>
+</ul>
+</section><section>
 </section>
 
   
