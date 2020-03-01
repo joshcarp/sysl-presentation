@@ -73,12 +73,12 @@ Foo:
 ---
 # Modelling interactions
 
-[Sequence Diagram Generation](http://anz-bank.github.io//sysl-playground/?input=QmFyOgogICAgQW5vdGhlckVuZHBvaW50KGlucHV0IDw6IEZvby5SZXF1ZXN0KToKICAgICAgICByZXR1cm4gUmVzcG9uc2UKRm9vOgogICAgdGhpc0VuZHBvaW50KGlucHV0IDw6IFJlcXVlc3QpOgogICAgICAgIEJhciA8LSBBbm90aGVyRW5kcG9pbnQKICAgICAgICByZXR1cm4gUmVzcG9uc2UKICAgICF0eXBlIFJlcXVlc3Q6CiAgICAgICAgcXVlcnkgPDogc3RyaW5nCiAgICAhdHlwZSBSZXNwb25zZToKICAgICAgICBxdWVyeSA8OiBzdHJpbmc=&cmd=c3lzbCBzZCAtbyAicHJvamVjdC5zdmciIC1zICJGb28gPC0gdGhpc0VuZHBvaW50IiB0bXAuc3lzbA==)
+<!-- [Sequence Diagram Generation](http://anz-bank.github.io//sysl-playground/?input=QmFyOgogICAgQW5vdGhlckVuZHBvaW50KGlucHV0IDw6IEZvby5SZXF1ZXN0KToKICAgICAgICByZXR1cm4gUmVzcG9uc2UKRm9vOgogICAgdGhpc0VuZHBvaW50KGlucHV0IDw6IFJlcXVlc3QpOgogICAgICAgIEJhciA8LSBBbm90aGVyRW5kcG9pbnQKICAgICAgICByZXR1cm4gUmVzcG9uc2UKICAgICF0eXBlIFJlcXVlc3Q6CiAgICAgICAgcXVlcnkgPDogc3RyaW5nCiAgICAhdHlwZSBSZXNwb25zZToKICAgICAgICBxdWVyeSA8OiBzdHJpbmc=&cmd=c3lzbCBzZCAtbyAicHJvamVjdC5zdmciIC1zICJGb28gPC0gdGhpc0VuZHBvaW50IiB0bXAuc3lzbA==) -->
 
 <!-- [image]
 src = "/static/img/simple.svg" -->
 
-[Sequence Diagram Generation](static/images/simple.svg)
+![Sequence Diagram Generation](images/simple.svg?raw=true)
 
 
 ---
