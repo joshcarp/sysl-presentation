@@ -21,29 +21,52 @@
 
     <section><h1 id="sysl">Sysl</h1>
 <h2 id="system-modeling-language-toolkit">System Modeling Language Toolkit</h2>
+</section>
+<p>
+<section data-noprocess data-shortcode-slide
+      data-background="#FFF">
+  
+<img src="images/logo.png?raw=true" alt="Logo"></p>
 </section><section>
-<h1 id="swagger-vs-proto-vs-sysl">Swagger vs proto vs Sysl</h1>
+<h2 id="swagger-vs-proto-vs-sysl">Swagger vs proto vs Sysl</h2>
 <ul>
 <li>All specify APIs</li>
 <li>Sysl specifies how those APIs interact with other systems</li>
 </ul>
 </section><section>
-<h1 id="swagger-example">Swagger example</h1>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#e6db74">&#34;Boiler plate server info here&#34;</span>
+<h2 id="swagger-example">Swagger example</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#66d9ef">definitions</span>:
+  <span style="color:#66d9ef">todosResponse</span>:
+    <span style="color:#66d9ef">format</span>: tuple
+    <span style="color:#66d9ef">properties</span>:
+      <span style="color:#66d9ef">completed</span>:
+        <span style="color:#66d9ef">type</span>: boolean
+      <span style="color:#66d9ef">id</span>:
+        <span style="color:#66d9ef">format</span>: integer
+        <span style="color:#66d9ef">type</span>: number
+      <span style="color:#66d9ef">title</span>:
+        <span style="color:#66d9ef">format</span>: string
+        <span style="color:#66d9ef">type</span>: string
+      <span style="color:#66d9ef">userId</span>:
+        <span style="color:#66d9ef">format</span>: integer
+        <span style="color:#66d9ef">type</span>: number
+    <span style="color:#66d9ef">type</span>: object
+<span style="color:#66d9ef">info</span>:
+  <span style="color:#66d9ef">version</span>: <span style="color:#ae81ff">0.0</span><span style="color:#ae81ff">.0</span>
 <span style="color:#66d9ef">paths</span>:
-  <span style="color:#66d9ef">/users</span>:
+  /todos/{<span style="color:#66d9ef">id}</span>:
     <span style="color:#66d9ef">get</span>:
-      <span style="color:#66d9ef">summary</span>: Returns a list of users.
-      <span style="color:#66d9ef">description</span>: Optional extended description in CommonMark or HTML.
-      <span style="color:#66d9ef">responses</span>:
-        <span style="color:#66d9ef">&#39;200&#39;</span>:    <span style="color:#75715e"># status code</span>
-          <span style="color:#66d9ef">description</span>: A JSON array of user names
-          <span style="color:#66d9ef">content</span>:
-            <span style="color:#66d9ef">application/json</span>:
-              <span style="color:#66d9ef">schema</span>: 
-                <span style="color:#66d9ef">type</span>: array
-                <span style="color:#66d9ef">items</span>: 
-                  <span style="color:#66d9ef">type</span>: string
+      <span style="color:#66d9ef">consumes</span>:
+      - application/json
+      <span style="color:#66d9ef">parameters</span>:
+      - <span style="color:#66d9ef">format</span>: integer
+        <span style="color:#66d9ef">in</span>: path
+        <span style="color:#66d9ef">name</span>: id
+        <span style="color:#66d9ef">type</span>: number
+      <span style="color:#66d9ef">produces</span>:
+      - application/json
+      <span style="color:#66d9ef">responses</span>: {}
+<span style="color:#66d9ef">swagger</span>: <span style="color:#e6db74">&#34;2.0&#34;</span>
 </code></pre></div></section><section>
 <h1 id="proto-example">Proto example</h1>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Request</span> {<span style="color:#960050;background-color:#1e0010">
@@ -62,7 +85,7 @@
 </span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">rpc</span> AnotherEndpoint(Request) <span style="color:#66d9ef">returns</span>(Response);<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
 </span></code></pre></div></section><section>
-<h1 id="sysl-example">Sysl example</h1>
+<h2 id="sysl-example">Sysl example</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#a6e22e">Bar</span>:
     <span style="color:#a6e22e">AnotherEndpoint</span>(<span style="color:#a6e22e">input</span> &lt;: <span style="color:#a6e22e">Foo</span>.<span style="color:#a6e22e">Request</span>):
         <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">Response</span>
@@ -76,16 +99,170 @@
         <span style="color:#a6e22e">query</span> &lt;: <span style="color:#66d9ef">string</span>
 
 </code></pre></div></section><section>
-<h1 id="modelling-interactions">Modelling interactions</h1>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p><img src="images/simple.svg?raw=true" alt="Sequence Diagram Generation"></p>
+<h2 id="modelling-interactions">Modelling interactions</h2>
+<p><img src="images/sequenceDiagram.png?raw=true" alt="Sequence Diagram Generation"></p>
 </section><section>
-<h1 id="code-generation">Code Generation</h1>
+<h2 id="code-generation">Code Generation</h2>
 <ul>
 <li>github.com/anz-bank/sysltemplate</li>
 </ul>
+</section><section>
+<h2 id="specification">Specification</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#a6e22e">simple</span>:
+    !<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Stuff</span>:
+        <span style="color:#a6e22e">Content</span> &lt;: <span style="color:#66d9ef">string</span>:
+            <span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">json_tag</span> = <span style="color:#e6db74">&#34;Content&#34;</span>  
+
+    <span style="color:#f92672">/</span><span style="color:#a6e22e">foobar</span>:
+        <span style="color:#a6e22e">GET</span>:
+            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ok</span> &lt;: <span style="color:#a6e22e">Bar</span>
+    !<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Bar</span>:
+        <span style="color:#66d9ef">string</span>
+</code></pre></div></section><section>
+<h2 id="import-a-dependency-from-swagger">Import a dependency from swagger</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#66d9ef">definitions</span>:
+  <span style="color:#66d9ef">todosResponse</span>:
+    <span style="color:#66d9ef">format</span>: tuple
+    <span style="color:#66d9ef">properties</span>:
+      <span style="color:#66d9ef">completed</span>:
+        <span style="color:#66d9ef">type</span>: boolean
+      <span style="color:#66d9ef">id</span>:
+        <span style="color:#66d9ef">format</span>: integer
+        <span style="color:#66d9ef">type</span>: number
+      <span style="color:#66d9ef">title</span>:
+        <span style="color:#66d9ef">format</span>: string
+        <span style="color:#66d9ef">type</span>: string
+      <span style="color:#66d9ef">userId</span>:
+        <span style="color:#66d9ef">format</span>: integer
+        <span style="color:#66d9ef">type</span>: number
+    <span style="color:#66d9ef">type</span>: object
+<span style="color:#66d9ef">info</span>:
+  <span style="color:#66d9ef">version</span>: <span style="color:#ae81ff">0.0</span><span style="color:#ae81ff">.0</span>
+<span style="color:#66d9ef">paths</span>:
+  /todos/{<span style="color:#66d9ef">id}</span>:
+    <span style="color:#66d9ef">get</span>:
+      <span style="color:#66d9ef">consumes</span>:
+      - application/json
+      <span style="color:#66d9ef">parameters</span>:
+      - <span style="color:#66d9ef">format</span>: integer
+        <span style="color:#66d9ef">in</span>: path
+        <span style="color:#66d9ef">name</span>: id
+        <span style="color:#66d9ef">type</span>: number
+      <span style="color:#66d9ef">produces</span>:
+      - application/json
+      <span style="color:#66d9ef">responses</span>: {}
+<span style="color:#66d9ef">swagger</span>: <span style="color:#e6db74">&#34;2.0&#34;</span>
+
+
+</code></pre></div></section><section>
+<h2 id="calling-a-dependency">Calling a dependency</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#a6e22e">simple</span>:
+    !<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Stuff</span>:
+        <span style="color:#a6e22e">Content</span> &lt;: <span style="color:#66d9ef">string</span>:
+            <span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">json_tag</span> = <span style="color:#e6db74">&#34;Content&#34;</span>  
+
+    <span style="color:#f92672">/</span><span style="color:#a6e22e">foobar</span>:
+        <span style="color:#a6e22e">GET</span>:
+            <span style="color:#a6e22e">jsonplaceholder</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">GET</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">todos</span><span style="color:#f92672">/</span>{<span style="color:#a6e22e">id</span>} <span style="color:#75715e">// Call dep
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ok</span> &lt;: <span style="color:#a6e22e">Stuff</span>
+</code></pre></div></section><section>
+<h2 id="code-generation-1">Code Generation</h2>
+<ul>
+<li><a href="https://github.com/anz-bank/sysltemplate/blob/master/makefile">Makefile</a></li>
+<li>Implement server</li>
+<li>Write function for <code>GET /foobar</code> endpoint</li>
+</ul>
+</section><section>
+<h2 id="makefile">Makefile</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#a6e22e">all</span><span style="color:#f92672">:</span> sysl
+
+input <span style="color:#f92672">=</span> simple.sysl
+app <span style="color:#f92672">=</span> simple
+down <span style="color:#f92672">=</span> jsonplaceholder <span style="color:#75715e"># this can be a list separated by a space or left empty</span>
+out <span style="color:#f92672">=</span> gen
+<span style="color:#75715e"># Current go import path
+</span><span style="color:#75715e"></span>basepath <span style="color:#f92672">=</span> github.com/anz-bank/sysltemplate
+</code></pre></div></section><section>
+<h2 id="writing-our-endpoint-function">Writing our endpoint function</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#75715e">// GetFoobarList refers to the endpoint in our sysl file
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">GetFoobarList</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">simple</span>.<span style="color:#a6e22e">GetFoobarListRequest</span>, <span style="color:#a6e22e">client</span> <span style="color:#a6e22e">simple</span>.<span style="color:#a6e22e">GetFoobarListClient</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">simple</span>.<span style="color:#a6e22e">Response</span>, <span style="color:#66d9ef">error</span>){
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">simple</span>.<span style="color:#a6e22e">Response</span>{<span style="color:#a6e22e">Content</span>:<span style="color:#e6db74">&#34;Hello World&#34;</span>}, <span style="color:#66d9ef">nil</span>
+}
+</code></pre></div></section><section>
+<h2 id="implementing-server">Implementing Server</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#75715e">// implementation/server.go
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// server.go contains all the manual config code that is used to implement the generated sysl
+</span><span style="color:#75715e"></span><span style="color:#f92672">package</span> <span style="color:#a6e22e">server</span>
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">serverAddress</span> = <span style="color:#e6db74">&#34;:8080&#34;</span>
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">LoadServices</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>) <span style="color:#66d9ef">error</span> {
+	<span style="color:#a6e22e">router</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">chi</span>.<span style="color:#a6e22e">NewRouter</span>()
+
+	<span style="color:#75715e">// simpleServiceInterface is the struct which is composed of our functions we wrote in `methods.go`
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// Struct embedding is used for the Service interface (yes, not interfaces)
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">simpleServiceInterface</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">simple</span>.<span style="color:#a6e22e">ServiceInterface</span>{
+		<span style="color:#a6e22e">GetFoobarList</span>: <span style="color:#a6e22e">GetFoobarList</span>,
+	}
+
+	<span style="color:#75715e">// Default callback behaviour
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">genCallbacks</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">defaultcallback</span>.<span style="color:#a6e22e">DefaultCallback</span>()
+
+	<span style="color:#a6e22e">serviceHandler</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">simple</span>.<span style="color:#a6e22e">NewServiceHandler</span>(<span style="color:#a6e22e">genCallbacks</span>,
+		<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">simpleServiceInterface</span>,
+		<span style="color:#a6e22e">jsonplaceholder</span>.<span style="color:#a6e22e">NewClient</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">DefaultClient</span>, <span style="color:#e6db74">&#34;http://jsonplaceholder.typicode.com&#34;</span>))
+
+	<span style="color:#75715e">// Service Router
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">serviceRouter</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">simple</span>.<span style="color:#a6e22e">NewServiceRouter</span>(<span style="color:#a6e22e">genCallbacks</span>, <span style="color:#a6e22e">serviceHandler</span>)
+	<span style="color:#a6e22e">serviceRouter</span>.<span style="color:#a6e22e">WireRoutes</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">router</span>)
+
+	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Starting Server on &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">serverAddress</span>)
+	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#a6e22e">serverAddress</span>, <span style="color:#a6e22e">router</span>))
+	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+}
+</code></pre></div></section><section>
+<p><code>curl localhost:8080/foobar</code></p>
+<p><code>{&quot;content&quot;:&quot;Hello World&quot;}</code></p>
+</section><section>
+<h2 id="calling-a-dependency-1">Calling a dependency</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">GetFoobarList</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">simple</span>.<span style="color:#a6e22e">GetFoobarListRequest</span>, <span style="color:#a6e22e">client</span> <span style="color:#a6e22e">simple</span>.<span style="color:#a6e22e">GetFoobarListClient</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">simple</span>.<span style="color:#a6e22e">Response</span>, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#a6e22e">response</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">GetTodos</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">jsonplaceholder</span>.<span style="color:#a6e22e">GetTodosRequest</span>{<span style="color:#a6e22e">ID</span>: <span style="color:#ae81ff">1</span>})
+
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+	}
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">response</span>)
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">simple</span>.<span style="color:#a6e22e">Response</span>{<span style="color:#a6e22e">Content</span>: <span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">Title</span>}, <span style="color:#66d9ef">nil</span>
+}
+</code></pre></div></section><section>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>{<span style="color:#e6db74">&#34;content&#34;</span>:<span style="color:#e6db74">&#34;delectus aut autem&#34;</span>}
+</code></pre></div><ul>
+<li><a href="http://jsonplaceholder.typicode.com/todos/1">Actual API called</a></li>
+</ul>
+</section><section>
+<h2 id="what-else-do-i-get">What else do I get?</h2>
+<ul>
+<li>Swaggerui/Redoc attached to handler</li>
+<li>Sequence diagrams</li>
+<li>Easily change API specification with minimal changes to code</li>
+</ul>
+</section><section>
+<h2 id="experimental">Experimental</h2>
+<ul>
+<li>
+<p><a href="http://localhost:8080/-/endpoints/redoc/">http://localhost:8080/-/endpoints/redoc/</a></p>
+</li>
+<li>
+<p><a href="http://localhost:8080/-/endpoints/swaggerui/">http://localhost:8080/-/endpoints/swaggerui/</a></p>
+</li>
+</ul>
+</section>
+<p>
+<section data-noprocess data-shortcode-slide
+      data-background="#FFF">
+  
+<img src="images/fabricmeme.jpg?raw=true" alt="Logo"></p>
 </section><section>
 </section>
 

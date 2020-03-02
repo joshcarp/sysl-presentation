@@ -6,30 +6,51 @@ outputs = ["Reveal"]
 # Sysl
 ## System Modeling Language Toolkit
 
+---
+{{< slide background="#FFF" >}}
+![Logo](images/logo.png?raw=true)
+
 
 ---
-# Swagger vs proto vs Sysl
+## Swagger vs proto vs Sysl
 - All specify APIs
 - Sysl specifies how those APIs interact with other systems
 
 ---
-# Swagger example
+## Swagger example
 ```yaml
-"Boiler plate server info here"
+definitions:
+  todosResponse:
+    format: tuple
+    properties:
+      completed:
+        type: boolean
+      id:
+        format: integer
+        type: number
+      title:
+        format: string
+        type: string
+      userId:
+        format: integer
+        type: number
+    type: object
+info:
+  version: 0.0.0
 paths:
-  /users:
+  /todos/{id}:
     get:
-      summary: Returns a list of users.
-      description: Optional extended description in CommonMark or HTML.
-      responses:
-        '200':    # status code
-          description: A JSON array of user names
-          content:
-            application/json:
-              schema: 
-                type: array
-                items: 
-                  type: string
+      consumes:
+      - application/json
+      parameters:
+      - format: integer
+        in: path
+        name: id
+        type: number
+      produces:
+      - application/json
+      responses: {}
+swagger: "2.0"
 ```
 --- 
 # Proto example
@@ -54,7 +75,7 @@ service Bar{
 
 ---
 
-# Sysl example
+## Sysl example
 ```go
 Bar:
     AnotherEndpoint(input <: Foo.Request):
@@ -71,20 +92,198 @@ Foo:
 ```
 
 ---
-# Modelling interactions
+## Modelling interactions
 
-<!-- [Sequence Diagram Generation](http://anz-bank.github.io//sysl-playground/?input=QmFyOgogICAgQW5vdGhlckVuZHBvaW50KGlucHV0IDw6IEZvby5SZXF1ZXN0KToKICAgICAgICByZXR1cm4gUmVzcG9uc2UKRm9vOgogICAgdGhpc0VuZHBvaW50KGlucHV0IDw6IFJlcXVlc3QpOgogICAgICAgIEJhciA8LSBBbm90aGVyRW5kcG9pbnQKICAgICAgICByZXR1cm4gUmVzcG9uc2UKICAgICF0eXBlIFJlcXVlc3Q6CiAgICAgICAgcXVlcnkgPDogc3RyaW5nCiAgICAhdHlwZSBSZXNwb25zZToKICAgICAgICBxdWVyeSA8OiBzdHJpbmc=&cmd=c3lzbCBzZCAtbyAicHJvamVjdC5zdmciIC1zICJGb28gPC0gdGhpc0VuZHBvaW50IiB0bXAuc3lzbA==) -->
-
-<!-- [image]
-src = "/static/img/simple.svg" -->
-
-![Sequence Diagram Generation](images/simple.svg?raw=true)
+![Sequence Diagram Generation](images/sequenceDiagram.png?raw=true)
 
 
 ---
-# Code Generation
+## Code Generation
 - github.com/anz-bank/sysltemplate
 
 ---
 
+## Specification
+```go
+simple:
+    !type Stuff:
+        Content <: string:
+            @json_tag = "Content"  
 
+    /foobar:
+        GET:
+            return ok <: Bar
+    !type Bar:
+        string
+```
+
+---
+## Import a dependency from swagger
+
+```yaml
+definitions:
+  todosResponse:
+    format: tuple
+    properties:
+      completed:
+        type: boolean
+      id:
+        format: integer
+        type: number
+      title:
+        format: string
+        type: string
+      userId:
+        format: integer
+        type: number
+    type: object
+info:
+  version: 0.0.0
+paths:
+  /todos/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - format: integer
+        in: path
+        name: id
+        type: number
+      produces:
+      - application/json
+      responses: {}
+swagger: "2.0"
+
+
+```
+---
+
+## Calling a dependency
+
+```go
+simple:
+    !type Stuff:
+        Content <: string:
+            @json_tag = "Content"  
+
+    /foobar:
+        GET:
+            jsonplaceholder <- GET /todos/{id} // Call dep
+            return ok <: Stuff
+```
+
+
+---
+
+## Code Generation
+
+- [Makefile](https://github.com/anz-bank/sysltemplate/blob/master/makefile)
+- Implement server
+- Write function for `GET /foobar` endpoint
+---
+
+## Makefile
+```Makefile
+all: sysl
+
+input = simple.sysl
+app = simple
+down = jsonplaceholder # this can be a list separated by a space or left empty
+out = gen
+# Current go import path
+basepath = github.com/anz-bank/sysltemplate
+```
+---
+
+## Writing our endpoint function
+
+```go
+// GetFoobarList refers to the endpoint in our sysl file
+func GetFoobarList(ctx context.Context, req *simple.GetFoobarListRequest, client simple.GetFoobarListClient) (*simple.Response, error){
+	return &simple.Response{Content:"Hello World"}, nil
+}
+```
+---
+
+## Implementing Server
+```go
+// implementation/server.go
+
+// server.go contains all the manual config code that is used to implement the generated sysl
+package server
+
+var serverAddress = ":8080"
+
+func LoadServices(ctx context.Context) error {
+	router := chi.NewRouter()
+
+	// simpleServiceInterface is the struct which is composed of our functions we wrote in `methods.go`
+	// Struct embedding is used for the Service interface (yes, not interfaces)
+	simpleServiceInterface := simple.ServiceInterface{
+		GetFoobarList: GetFoobarList,
+	}
+
+	// Default callback behaviour
+	genCallbacks := defaultcallback.DefaultCallback()
+
+	serviceHandler := simple.NewServiceHandler(genCallbacks,
+		&simpleServiceInterface,
+		jsonplaceholder.NewClient(http.DefaultClient, "http://jsonplaceholder.typicode.com"))
+
+	// Service Router
+	serviceRouter := simple.NewServiceRouter(genCallbacks, serviceHandler)
+	serviceRouter.WireRoutes(ctx, router)
+
+	log.Println("Starting Server on " + serverAddress)
+	log.Fatal(http.ListenAndServe(serverAddress, router))
+	return nil
+}
+```
+---
+
+
+```curl localhost:8080/foobar```
+
+```{"content":"Hello World"}```
+
+---
+## Calling a dependency
+```go
+func GetFoobarList(ctx context.Context, req *simple.GetFoobarListRequest, client simple.GetFoobarListClient) (*simple.Response, error) {
+	response, err := client.GetTodos(ctx, &jsonplaceholder.GetTodosRequest{ID: 1})
+
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(response)
+	return &simple.Response{Content: response.Title}, nil
+}
+```
+---
+
+```go
+{"content":"delectus aut autem"}
+```
+
+- [Actual API called](http://jsonplaceholder.typicode.com/todos/1)
+
+---
+
+## What else do I get?
+
+- Swaggerui/Redoc attached to handler
+- Sequence diagrams
+- Easily change API specification with minimal changes to code
+
+--- 
+## Experimental
+
+- [http://localhost:8080/-/endpoints/redoc/](http://localhost:8080/-/endpoints/redoc/)
+
+- [http://localhost:8080/-/endpoints/swaggerui/](http://localhost:8080/-/endpoints/swaggerui/)
+
+---
+{{< slide background="#FFF" >}}
+![Logo](images/fabricmeme.jpg?raw=true)
+
+---
