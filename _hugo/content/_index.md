@@ -173,7 +173,7 @@ simple:
 
 ## Code Generation
 
-- [Makefile](https://github.com/anz-bank/sysltemplate/blob/master/makefile)
+- [Makefile](https://github.com/anz-bank/sysltemplate/blob/master/Makefile)
 - Implement server
 - Write function for `GET /foobar` endpoint
 ---
