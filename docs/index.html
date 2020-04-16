@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-	<meta name="generator" content="Hugo 0.63.2" />
+	<meta name="generator" content="Hugo 0.66.0" />
     <meta charset="utf-8">
 <title>My presentation</title>
 
@@ -21,12 +21,6 @@
 
     <section><h1 id="sysl">Sysl</h1>
 <h2 id="system-modeling-language-toolkit">System Modeling Language Toolkit</h2>
-</section>
-<p>
-<section data-noprocess data-shortcode-slide
-      data-background="#FFF">
-  
-<img src="images/logo.png?raw=true" alt="Logo"></p>
 </section><section>
 <h2 id="swagger-vs-proto-vs-sysl">Swagger vs proto vs Sysl</h2>
 <ul>
@@ -52,7 +46,7 @@
         <span style="color:#66d9ef">type</span>: number
     <span style="color:#66d9ef">type</span>: object
 <span style="color:#66d9ef">info</span>:
-  <span style="color:#66d9ef">version</span>: <span style="color:#ae81ff">0.0</span><span style="color:#ae81ff">.0</span>
+  <span style="color:#66d9ef">version</span>: <span style="color:#ae81ff">0.0.0</span>
 <span style="color:#66d9ef">paths</span>:
   /todos/{<span style="color:#66d9ef">id}</span>:
     <span style="color:#66d9ef">get</span>:
@@ -72,15 +66,15 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Request</span> {<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">string</span> query <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Response</span> {<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">string</span> query <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">service</span> Foo{<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">rpc</span> thisEndpoint(Request) <span style="color:#66d9ef">returns</span>(Response);<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">service</span> Bar{<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">rpc</span> AnotherEndpoint(Request) <span style="color:#66d9ef">returns</span>(Response);<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
@@ -137,7 +131,7 @@
         <span style="color:#66d9ef">type</span>: number
     <span style="color:#66d9ef">type</span>: object
 <span style="color:#66d9ef">info</span>:
-  <span style="color:#66d9ef">version</span>: <span style="color:#ae81ff">0.0</span><span style="color:#ae81ff">.0</span>
+  <span style="color:#66d9ef">version</span>: <span style="color:#ae81ff">0.0.0</span>
 <span style="color:#66d9ef">paths</span>:
   /todos/{<span style="color:#66d9ef">id}</span>:
     <span style="color:#66d9ef">get</span>:
@@ -180,8 +174,9 @@ input <span style="color:#f92672">=</span> simple.sysl
 app <span style="color:#f92672">=</span> simple
 down <span style="color:#f92672">=</span> jsonplaceholder <span style="color:#75715e"># this can be a list separated by a space or left empty</span>
 out <span style="color:#f92672">=</span> gen
-<span style="color:#75715e"># Current go import path
-</span><span style="color:#75715e"></span>basepath <span style="color:#f92672">=</span> github.com/anz-bank/sysltemplate
+<span style="color:#75715e"># Current go import path This needs to change if you&#39;re not in the current go.mod directory
+</span><span style="color:#75715e"></span>
+basepath <span style="color:#f92672">=</span> <span style="color:#66d9ef">$(</span>shell cat <span style="color:#66d9ef">$(</span>goModLocation<span style="color:#66d9ef">)</span> | grep module | sed <span style="color:#e6db74">&#39;s/module//&#39;</span> | sed -e <span style="color:#e6db74">&#39;s/^[[:space:]]*//&#39;</span><span style="color:#66d9ef">)</span>
 </code></pre></div></section><section>
 <h2 id="writing-our-endpoint-function">Writing our endpoint function</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#75715e">// GetFoobarList refers to the endpoint in our sysl file
@@ -247,22 +242,6 @@ out <span style="color:#f92672">=</span> gen
 <li>Sequence diagrams</li>
 <li>Easily change API specification with minimal changes to code</li>
 </ul>
-</section><section>
-<h2 id="experimental">Experimental</h2>
-<ul>
-<li>
-<p><a href="http://localhost:8080/-/endpoints/redoc/">http://localhost:8080/-/endpoints/redoc/</a></p>
-</li>
-<li>
-<p><a href="http://localhost:8080/-/endpoints/swaggerui/">http://localhost:8080/-/endpoints/swaggerui/</a></p>
-</li>
-</ul>
-</section>
-<p>
-<section data-noprocess data-shortcode-slide
-      data-background="#FFF">
-  
-<img src="images/fabricmeme.jpg?raw=true" alt="Logo"></p>
 </section><section>
 </section>
 

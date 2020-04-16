@@ -7,11 +7,7 @@ outputs = ["Reveal"]
 ## System Modeling Language Toolkit
 
 ---
-{{< slide background="#FFF" >}}
-![Logo](images/logo.png?raw=true)
 
-
----
 ## Swagger vs proto vs Sysl
 - All specify APIs
 - Sysl specifies how those APIs interact with other systems
@@ -190,8 +186,9 @@ input = simple.sysl
 app = simple
 down = jsonplaceholder # this can be a list separated by a space or left empty
 out = gen
-# Current go import path
-basepath = github.com/anz-bank/sysltemplate
+# Current go import path This needs to change if you're not in the current go.mod directory
+
+basepath = $(shell cat $(goModLocation) | grep module | sed 's/module//' | sed -e 's/^[[:space:]]*//')
 ```
 ---
 
@@ -274,16 +271,5 @@ func GetFoobarList(ctx context.Context, req *simple.GetFoobarListRequest, client
 - Swaggerui/Redoc attached to handler
 - Sequence diagrams
 - Easily change API specification with minimal changes to code
-
---- 
-## Experimental
-
-- [http://localhost:8080/-/endpoints/redoc/](http://localhost:8080/-/endpoints/redoc/)
-
-- [http://localhost:8080/-/endpoints/swaggerui/](http://localhost:8080/-/endpoints/swaggerui/)
-
----
-{{< slide background="#FFF" >}}
-![Logo](images/fabricmeme.jpg?raw=true)
 
 ---
